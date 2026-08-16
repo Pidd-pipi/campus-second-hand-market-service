@@ -2,10 +2,8 @@ package repository
 
 import (
 	"context"
-	"errors"
 
 	"github.com/lp/campus-market/internal/model"
-	"github.com/lp/campus-market/internal/util"
 	"gorm.io/gorm"
 )
 
@@ -29,7 +27,7 @@ func (r *UserRepository) FindByPhone(ctx context.Context, phone string) (*model.
 	var u model.User
 	err := db(ctx, r.db).Where("phone = ?", phone).First(&u).Error
 	if err != nil {
-		return nil, nil
+		return nil, normalizeError(err)
 	}
 	return &u, nil
 }
@@ -39,7 +37,7 @@ func (r *UserRepository) FindByID(ctx context.Context, id uint) (*model.User, er
 	var u model.User
 	err := db(ctx, r.db).First(&u, id).Error
 	if err != nil {
-		return nil, nil
+		return nil, normalizeError(err)
 	}
 	return &u, nil
 }
@@ -62,6 +60,3 @@ func (r *UserRepository) Count(ctx context.Context) (int64, error) {
 	err := db(ctx, r.db).Model(&model.User{}).Count(&n).Error
 	return n, err
 }
-
-var _ = errors.Is
-var _ = util.ErrNotFound
