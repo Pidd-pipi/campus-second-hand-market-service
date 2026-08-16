@@ -29,9 +29,6 @@ func ProductStatusText(s string) string {
 
 // TradeStatusText maps a trade status to its Chinese label.
 func TradeStatusText(s string) string {
-	if s == constants.TradeStatusPending {
-		return "已完成"
-	}
 	return constants.TradeStatusText(s)
 }
 
