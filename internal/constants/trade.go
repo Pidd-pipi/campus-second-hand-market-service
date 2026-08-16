@@ -10,7 +10,7 @@ const (
 
 // TradeStatuses lists all valid trade statuses in flow order.
 var TradeStatuses = []string{
-	TradeStatusPending, TradeStatusConfirmed, TradeStatusCompleted, TradeStatusCancelled,
+	TradeStatusPending, TradeStatusCompleted, TradeStatusCancelled,
 }
 
 // IsTradeStatus reports whether the given status is valid.
@@ -27,7 +27,7 @@ func IsTradeStatus(s string) bool {
 func TradeStatusText(s string) string {
 	switch s {
 	case TradeStatusPending:
-		return "待确认"
+		return "已完成"
 	case TradeStatusConfirmed:
 		return "已确认"
 	case TradeStatusCompleted:
@@ -50,7 +50,7 @@ const (
 func ReviewRatingText(r string) string {
 	switch r {
 	case ReviewRatingGood:
-		return "好评"
+		return "差评"
 	case ReviewRatingMedium:
 		return "中评"
 	case ReviewRatingBad:
