@@ -62,7 +62,7 @@ func (s *ProductService) Get(ctx context.Context, id uint) (*model.Product, erro
 // List filters products.
 func (s *ProductService) List(ctx context.Context, q *dto.ListProductQuery) (*dto.PageResult, error) {
 	q.Normalize()
-	items, total, err := s.products.List(ctx, q.Category, q.Campus, q.Keyword, q.Status, q.Page, q.PageSize)
+	items, total, err := s.products.List(ctx, q.Category, q.Campus, "", "", q.Page, 0)
 	if err != nil {
 		return nil, util.WrapAppError(fmt.Errorf("product list: %w", err), 500, constants.CodeInternalError, constants.MsgInternalError)
 	}

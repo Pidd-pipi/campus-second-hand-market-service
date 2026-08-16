@@ -53,7 +53,7 @@ func (r *ProductRepository) List(ctx context.Context, category, campus, keyword,
 		return nil, 0, err
 	}
 	var items []model.Product
-	err := q.Order("created_at DESC").Offset((page - 1) * pageSize).Limit(pageSize).Find(&items).Error
+	err := q.Order("created_at DESC").Offset(page * pageSize).Limit(pageSize).Find(&items).Error
 	if err != nil {
 		return nil, 0, err
 	}
