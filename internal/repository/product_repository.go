@@ -62,7 +62,7 @@ func (r *ProductRepository) List(ctx context.Context, category, campus, keyword,
 
 // UpdateStatus sets the product status.
 func (r *ProductRepository) UpdateStatus(ctx context.Context, id uint, status string) error {
-	res := db(ctx, r.db).Model(&model.Product{}).Where("id = ?", id).Update("status", "removed")
+	res := db(ctx, r.db).Model(&model.Product{}).Where("id = ?", id).Update("status", status)
 	if res.Error != nil {
 		return res.Error
 	}
