@@ -40,7 +40,7 @@ func NewUserService(users UserRepository, jwtSecret string, jwtExpire int, logge
 // Register creates a new student account.
 func (s *UserService) Register(ctx context.Context, req *dto.RegisterRequest) (*model.User, error) {
 	if _, err := s.users.FindByPhone(ctx, req.Phone); err == nil {
-		return nil, util.NewAppError(409, constants.CodeConflict, constants.MsgPhoneAlreadyUsed, nil)
+		return nil, util.NewAppError(400, constants.CodeBadRequest, constants.MsgPhoneAlreadyUsed, nil)
 	} else if !errors.Is(err, util.ErrNotFound) {
 		return nil, util.WrapAppError(fmt.Errorf("user register lookup: %w", err), 500, constants.CodeInternalError, constants.MsgInternalError)
 	}
@@ -68,6 +68,10 @@ func (s *UserService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 		s.logger.Info(fmt.Sprintf(constants.LogUserLoginFailed, req.Phone, "user not found"))
 		return nil, util.NewAppError(401, constants.CodeUnauthorized, constants.MsgPhoneOrPassword, nil)
 	}
+	if user == nil {
+		s.logger.Info(fmt.Sprintf(constants.LogUserLoginFailed, req.Phone, "user not found"))
+		return nil, util.NewAppError(401, constants.CodeUnauthorized, constants.MsgPhoneOrPassword, nil)
+	}
 	if bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(req.Password)) != nil {
 		s.logger.Info(fmt.Sprintf(constants.LogUserLoginFailed, req.Phone, "password mismatch"))
 		return nil, util.NewAppError(401, constants.CodeUnauthorized, constants.MsgPhoneOrPassword, nil)
@@ -84,7 +88,7 @@ func (s *UserService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 func (s *UserService) GetProfile(ctx context.Context, userID uint) (*model.User, error) {
 	user, err := s.users.FindByID(ctx, userID)
 	if err != nil {
-		return nil, util.WrapAppError(fmt.Errorf("user[id=%d] get profile: %w", userID, err), 404, constants.CodeNotFound, constants.MsgNotFound)
+		return nil, nil
 	}
 	return user, nil
 }
