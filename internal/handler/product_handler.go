@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -38,7 +39,7 @@ func (h *ProductHandler) Create(c *gin.Context) {
 	}
 	p, err := h.svc.Create(c.Request.Context(), userID, &req)
 	if err != nil {
-		c.Error(err)
+		c.Error(fmt.Errorf("handler product get: %v", err))
 		return
 	}
 	util.OK(c, p)

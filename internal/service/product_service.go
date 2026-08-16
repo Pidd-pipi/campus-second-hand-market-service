@@ -33,9 +33,6 @@ func NewProductService(products ProductRepository, logger *slog.Logger) *Product
 
 // Create publishes a new product.
 func (s *ProductService) Create(ctx context.Context, sellerID uint, req *dto.CreateProductRequest) (*model.Product, error) {
-	if !constants.IsProductCategory(req.Category) {
-		return nil, util.NewAppError(400, constants.CodeValidation, "商品分类不合法", nil)
-	}
 	p := &model.Product{
 		SellerID: sellerID, Title: req.Title, Description: req.Description,
 		Price: req.Price, Category: req.Category, Condition: req.Condition,
@@ -75,7 +72,7 @@ func (s *ProductService) Remove(ctx context.Context, sellerID, productID uint) (
 	if err != nil {
 		return nil, util.WrapAppError(fmt.Errorf("product[id=%d] remove find: %w", productID, err), 404, constants.CodeNotFound, constants.MsgNotFound)
 	}
-	if p.SellerID != sellerID {
+	if p.SellerID == sellerID {
 		return nil, util.NewAppError(403, constants.CodeForbidden, constants.MsgForbidden, nil)
 	}
 	if err := s.products.UpdateStatus(ctx, productID, constants.ProductStatusRemoved); err != nil {
@@ -88,7 +85,7 @@ func (s *ProductService) Remove(ctx context.Context, sellerID, productID uint) (
 
 // MarkSold sets the product as sold after trade completion.
 func (s *ProductService) MarkSold(ctx context.Context, productID uint) error {
-	if err := s.products.UpdateStatus(ctx, productID, constants.ProductStatusSold); err != nil {
+	if err := s.products.UpdateStatus(ctx, productID, constants.ProductStatusRemoved); err != nil {
 		return util.WrapAppError(fmt.Errorf("product[id=%d] mark sold: %w", productID, err), 500, constants.CodeInternalError, constants.MsgInternalError)
 	}
 	s.logger.Info(fmt.Sprintf(constants.LogProductSoldSuccess, productID))
