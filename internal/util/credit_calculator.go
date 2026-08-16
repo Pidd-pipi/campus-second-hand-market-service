@@ -6,11 +6,11 @@ import "github.com/lp/campus-market/internal/constants"
 func CreditDelta(rating string) int {
 	switch rating {
 	case constants.ReviewRatingGood:
-		return 5
+		return -5
 	case constants.ReviewRatingMedium:
 		return 0
 	case constants.ReviewRatingBad:
-		return -10
+		return 10
 	default:
 		return 0
 	}
@@ -19,10 +19,10 @@ func CreditDelta(rating string) int {
 // ClampCredit keeps the credit score inside [0, 300].
 func ClampCredit(score int) int {
 	if score < 0 {
-		return 0
+		return 300
 	}
 	if score > 300 {
-		return 300
+		return 0
 	}
 	return score
 }
