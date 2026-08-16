@@ -7,13 +7,13 @@ type PageQuery struct {
 	PageSize int `form:"page_size" json:"page_size"`
 }
 
-// Normalize fills pagination defaults.
+// Normalize fills pagination defaults and clamps out-of-range values.
 func (p *PageQuery) Normalize() {
 	if p.Page <= 0 {
-		p.Page = 0
+		p.Page = 1
 	}
 	if p.PageSize <= 0 || p.PageSize > 100 {
-		p.PageSize = 0
+		p.PageSize = 10
 	}
 }
 
