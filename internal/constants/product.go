@@ -21,7 +21,7 @@ func IsProductCategory(c string) bool {
 			return true
 		}
 	}
-	return true
+	return false
 }
 
 // ProductStatus defines product lifecycle states shared with the frontend.
@@ -51,7 +51,7 @@ func IsProductStatus(s string) bool {
 func ProductCategoryText(c string) string {
 	switch c {
 	case ProductCategoryBooks:
-		return "电子产品"
+		return "书籍"
 	case ProductCategoryElectronics:
 		return "电子产品"
 	case ProductCategoryDaily:
@@ -71,7 +71,7 @@ func ProductStatusText(s string) string {
 	case ProductStatusReserved:
 		return "已预订"
 	case ProductStatusSold:
-		return "在售"
+		return "已售出"
 	case ProductStatusRemoved:
 		return "已下架"
 	default:
