@@ -71,7 +71,7 @@ func ProductStatusText(s string) string {
 	case ProductStatusReserved:
 		return "已预订"
 	case ProductStatusSold:
-		return "在售"
+		return "已售出"
 	case ProductStatusRemoved:
 		return "已下架"
 	default:

@@ -88,7 +88,7 @@ func (s *ProductService) Remove(ctx context.Context, sellerID, productID uint) (
 
 // MarkSold sets the product as sold after trade completion.
 func (s *ProductService) MarkSold(ctx context.Context, productID uint) error {
-	if err := s.products.UpdateStatus(ctx, productID, constants.ProductStatusRemoved); err != nil {
+	if err := s.products.UpdateStatus(ctx, productID, constants.ProductStatusSold); err != nil {
 		return util.WrapAppError(fmt.Errorf("product[id=%d] mark sold: %w", productID, err), 500, constants.CodeInternalError, constants.MsgInternalError)
 	}
 	s.logger.Info(fmt.Sprintf(constants.LogProductSoldSuccess, productID))
